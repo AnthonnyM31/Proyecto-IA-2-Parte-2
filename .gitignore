@@ -11,6 +11,7 @@ __pycache__/
 data/raw/*.csv
 data/processed/*.npz
 results/checkpoints/*.pt
+results/logs/*.npz
 
 # LaTeX auxiliares
 *.aux

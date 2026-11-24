@@ -1,0 +1,80 @@
+[
+  {
+    "model_name": "pure_lstm",
+    "seed": 42,
+    "device": "cuda",
+    "n_params": 80984,
+    "best_epoch": 13,
+    "epochs_ran": 21,
+    "best_val_mse": 0.001619684670093893,
+    "total_train_time_s": 92.5129199999999,
+    "mean_epoch_time_s": 4.404524876190462,
+    "checkpoint_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\checkpoints\\pure_lstm_seed42.pt",
+    "history_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\logs\\pure_lstm_seed42_history.csv"
+  },
+  {
+    "model_name": "pure_lstm",
+    "seed": 123,
+    "device": "cuda",
+    "n_params": 80984,
+    "best_epoch": 42,
+    "epochs_ran": 50,
+    "best_val_mse": 0.001512160972210309,
+    "total_train_time_s": 226.15106950000018,
+    "mean_epoch_time_s": 4.522532382000004,
+    "checkpoint_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\checkpoints\\pure_lstm_seed123.pt",
+    "history_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\logs\\pure_lstm_seed123_history.csv"
+  },
+  {
+    "model_name": "pure_lstm",
+    "seed": 456,
+    "device": "cuda",
+    "n_params": 80984,
+    "best_epoch": 38,
+    "epochs_ran": 46,
+    "best_val_mse": 0.001537523240702675,
+    "total_train_time_s": 219.64055860000008,
+    "mean_epoch_time_s": 4.774001295652189,
+    "checkpoint_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\checkpoints\\pure_lstm_seed456.pt",
+    "history_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\logs\\pure_lstm_seed456_history.csv"
+  },
+  {
+    "model_name": "cnn1d_lstm",
+    "seed": 42,
+    "device": "cuda",
+    "n_params": 131480,
+    "best_epoch": 39,
+    "epochs_ran": 47,
+    "best_val_mse": 0.0014484547869552831,
+    "total_train_time_s": 251.05444549999993,
+    "mean_epoch_time_s": 5.340743197872337,
+    "checkpoint_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\checkpoints\\cnn1d_lstm_seed42.pt",
+    "history_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\logs\\cnn1d_lstm_seed42_history.csv"
+  },
+  {
+    "model_name": "cnn1d_lstm",
+    "seed": 123,
+    "device": "cuda",
+    "n_params": 131480,
+    "best_epoch": 20,
+    "epochs_ran": 28,
+    "best_val_mse": 0.001565258573232481,
+    "total_train_time_s": 163.05018559999962,
+    "mean_epoch_time_s": 5.8224461964286025,
+    "checkpoint_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\checkpoints\\cnn1d_lstm_seed123.pt",
+    "history_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\logs\\cnn1d_lstm_seed123_history.csv"
+  },
+  {
+    "model_name": "cnn1d_lstm",
+    "seed": 456,
+    "device": "cuda",
+    "n_params": 131480,
+    "best_epoch": 34,
+    "epochs_ran": 42,
+    "best_val_mse": 0.0014665337237319807,
+    "total_train_time_s": 226.91885309999998,
+    "mean_epoch_time_s": 5.402008378571411,
+    "checkpoint_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\checkpoints\\cnn1d_lstm_seed456.pt",
+    "history_path": "C:\\Users\\PC Master\\ULTIMO SEMESTRE\\INTELIGENCIA ARTIFICIAL 2\\Proyecto Parte 2\\results\\logs\\cnn1d_lstm_seed456_history.csv"
+  }
+]

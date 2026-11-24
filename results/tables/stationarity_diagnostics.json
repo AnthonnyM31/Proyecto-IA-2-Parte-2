@@ -1,0 +1,9 @@
+{
+  "n_samples": 8760.0,
+  "adf_stat_raw": -6.0477789094645145,
+  "adf_pvalue_raw": 1.299337419764607e-07,
+  "kpss_stat_raw": 1.6630523652354026,
+  "kpss_pvalue_raw": 0.01,
+  "adf_stat_diff24": -11.656939247904516,
+  "adf_pvalue_diff24": 1.97507936955407e-21
+}

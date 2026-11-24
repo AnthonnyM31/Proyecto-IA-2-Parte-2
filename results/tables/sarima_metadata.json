@@ -1,0 +1,9 @@
+{
+  "n_origins": 28.0,
+  "fit_days": 60.0,
+  "mean_fit_time_s": 10.114570642857107,
+  "total_eval_time_s": 283.207977999999,
+  "mean_infer_latency_ms": 3.8048642856957877,
+  "mean_aic": 19744.61851770779,
+  "convergence_fallbacks": 0.0
+}

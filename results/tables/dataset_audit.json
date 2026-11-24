@@ -1,0 +1,32 @@
+{
+  "cleaning": {
+    "raw_rows": 145366,
+    "raw_nans": 0,
+    "duplicate_timestamps_resolved": 4,
+    "missing_hours_inserted": 30,
+    "total_hours_interpolated": 30,
+    "max_consecutive_missing_hours": 1,
+    "clean_rows": 145392,
+    "start_datetime": "2002-01-01 01:00:00",
+    "end_datetime": "2018-08-03 00:00:00",
+    "mean_mw": 32078.927654203806,
+    "std_mw": 6464.283311412701,
+    "min_mw": 14544.0,
+    "max_mw": 62009.0
+  },
+  "splits": {
+    "train_rows": 101774,
+    "train_start": "2002-01-01 01:00:00",
+    "train_end": "2013-08-11 14:00:00",
+    "val_rows": 21808,
+    "val_start": "2013-08-11 15:00:00",
+    "val_end": "2016-02-06 06:00:00",
+    "test_rows": 21810,
+    "test_start": "2016-02-06 07:00:00",
+    "test_end": "2018-08-03 00:00:00",
+    "train_windows": 101511,
+    "val_windows": 21545,
+    "test_windows": 21547,
+    "peak_threshold_p90_mw": 40850.7
+  }
+}

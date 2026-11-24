@@ -99,7 +99,8 @@ def plot_eda_and_splits(cfg: ProjectConfig) -> None:
     ax.plot(lags, acf_vals, color="#2b5c8f", linewidth=1.2)
     for lag_mark, lbl in ((24, "24h"), (72, "72h (W)"), (168, "168h (7d)")):
         ax.axvline(lag_mark, color="#cb181d", linestyle=":", linewidth=1.1)
-        ax.text(lag_mark + 2, 0.22, lbl, color="#cb181d", fontsize=8, rotation=90)
+        y_pos = 0.86 if lag_mark == 72 else 0.22
+        ax.text(lag_mark + 2, y_pos, lbl, color="#cb181d", fontsize=8, rotation=90)
     ax.set_title("(d) Autocorrelación horaria (ACF hasta t-168)")
     ax.set_xlabel("Retardo (horas)")
     ax.set_ylabel("ACF")
@@ -133,30 +134,30 @@ def plot_architecture_diagram(cfg: ProjectConfig) -> None:
         ax.annotate("", xy=(x2, y2), xytext=(x1, y1), arrowprops=dict(arrowstyle="->", lw=1.4, color="#34495e"))
 
     # Entrada común
-    draw_box(2, 15, 16, 12, "Entrada Causal\n[B, W=72, F=9]\n(MW, sin/cos, lag 168)", "#e8f4f8")
+    draw_box(1, 14, 20, 14, "Entrada Causal\n[B, W=72, F=9]\n(MW, sin/cos, lag 168)", "#e8f4f8")
 
     # Rama superior: Baseline LSTM Pura
-    ax.text(50, 38.5, "Rama A: Baseline Homogéneo (LSTM Pura)", ha="center", fontsize=9.5, fontweight="bold", color="#d95f02")
+    ax.text(53, 38.5, "Rama A: Baseline Homogéneo (LSTM Pura)", ha="center", fontsize=9.5, fontweight="bold", color="#d95f02")
     draw_box(28, 28, 22, 8, "LSTM (128 unidades)\n[B, 72, 9] -> [B, 128]", "#fdebd0", "#d95f02")
     draw_box(56, 28, 19, 8, "FC(64)+ReLU+Drop\n-> Salida [B, 24]", "#fdebd0", "#d95f02")
 
     # Rama inferior: Arquitectura Propuesta CNN1D-LSTM
-    ax.text(50, 19.5, "Rama B: Arquitectura Híbrida Propuesta (CNN1D-LSTM)", ha="center", fontsize=9.5, fontweight="bold", color="#1b7837")
-    draw_box(23, 5, 19, 11, "Conv1D(k=3, 64)\n+ Conv1D(k=5, 64)\n[B, 64, 72]", "#e5f5e0", "#1b7837")
-    draw_box(45, 5, 15, 11, "MaxPool1D(2)\n+ Dropout1d(0.2)\n[B, 36, 64]", "#e5f5e0", "#1b7837")
-    draw_box(63, 5, 15, 11, "LSTM (128 u.)\nÚltimo estado\n[B, 128]", "#e5f5e0", "#1b7837")
+    ax.text(53, 19.5, "Rama B: Arquitectura Híbrida Propuesta (CNN1D-LSTM)", ha="center", fontsize=9.5, fontweight="bold", color="#1b7837")
+    draw_box(24, 5, 19, 11, "Conv1D(k=3, 64)\n+ Conv1D(k=5, 64)\n[B, 64, 72]", "#e5f5e0", "#1b7837")
+    draw_box(46, 5, 15, 11, "MaxPool1D(2)\n+ Dropout1d(0.2)\n[B, 36, 64]", "#e5f5e0", "#1b7837")
+    draw_box(64, 5, 14, 11, "LSTM (128 u.)\nÚltimo estado\n[B, 128]", "#e5f5e0", "#1b7837")
     draw_box(81, 5, 17, 11, "FC(64)+ReLU+Drop\n-> Salida [B, 24]\n(Horizonte 24h)", "#d9f0d3", "#1b7837")
 
     # Salida común etiqueta
     draw_box(81, 28, 17, 8, "Pronóstico 24h\nDesnormalizado\n(MW reales)", "#f0f0f0")
 
-    draw_arrow(18.5, 24, 27.5, 32)
+    draw_arrow(21.5, 24, 27.5, 32)
     draw_arrow(50.5, 32, 55.5, 32)
     draw_arrow(75.5, 32, 80.5, 32)
 
-    draw_arrow(18.5, 18, 22.5, 10.5)
-    draw_arrow(42.5, 10.5, 44.5, 10.5)
-    draw_arrow(60.5, 10.5, 62.5, 10.5)
+    draw_arrow(21.5, 18, 23.5, 10.5)
+    draw_arrow(43.5, 10.5, 45.5, 10.5)
+    draw_arrow(61.5, 10.5, 63.5, 10.5)
     draw_arrow(78.5, 10.5, 80.5, 10.5)
     draw_arrow(89.5, 16.5, 89.5, 27.5)
 
@@ -257,9 +258,15 @@ def plot_horizon_and_regimes(cfg: ProjectConfig) -> None:
         "LSTM_Pura": ("#d95f02", "--"),
         "CNN1D_LSTM": ("#1b9e77", "-"),
     }
+    labels_map = {
+        "Persistencia_24h": "Persistencia 24h",
+        "Perfil_Condicional": "Perfil Condicional",
+        "LSTM_Pura": "LSTM Pura",
+        "CNN1D_LSTM": "CNN1D-LSTM",
+    }
     for model_name, (col, ls) in styles.items():
         sub = df_h[df_h["Modelo"] == model_name]
-        ax.plot(sub["horizon_h"], sub["RMSE"], color=col, linestyle=ls, lw=1.8, label=model_name.replace("_", " "))
+        ax.plot(sub["horizon_h"], sub["RMSE"], color=col, linestyle=ls, lw=1.8, label=labels_map[model_name])
     ax.set_title("(a) Crecimiento del RMSE por horizonte (h = 1..24h)")
     ax.set_xlabel("Paso horario futuro (h)")
     ax.set_ylabel("RMSE (MW)")
@@ -281,7 +288,7 @@ def plot_horizon_and_regimes(cfg: ProjectConfig) -> None:
             float(sub_r[(sub_r["Modelo"] == m_name) & (sub_r["Regimen"] == r)]["RMSE"].iloc[0])
             for r in regimes
         ]
-        ax.bar(x + (idx - 1) * width, vals, width=width, color=col, label=m_name.replace("_", " "))
+        ax.bar(x + (idx - 1) * width, vals, width=width, color=col, label=labels_map[m_name])
 
     ax.set_title("(b) Desempeño en regímenes operativos críticos (PI-2)")
     ax.set_xticks(x)
