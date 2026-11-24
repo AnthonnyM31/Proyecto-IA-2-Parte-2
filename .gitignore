@@ -1,0 +1,30 @@
+# Python & Entorno Virtual
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Datos y Checkpoints pesados (instrucciones de descarga en README)
+data/raw/*.csv
+data/processed/*.npz
+results/checkpoints/*.pt
+
+# LaTeX auxiliares
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+
+# Sistema / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
