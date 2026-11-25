@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[spanish,es-tabla]{babel}
+\decimalpoint
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
 \usepackage{textcomp}
@@ -10,6 +11,7 @@
 \usepackage{cite}
 \usepackage{url}
 \usepackage{microtype}
+\usepackage{array}
 \usepackage{tabularx}
 
 \begin{document}
@@ -97,22 +99,23 @@ Se emplea el registro horario real de consumo eléctrico de \textit{PJM Intercon
 \centering
 \caption{Auditoría de Limpieza DST y Partición Cronológica (PJME Real)}
 \label{tab:data_audit}
-\footnotesize
-\begin{tabularx}{\columnwidth}{l l r}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{2.35cm} >{\raggedright\arraybackslash}X r}
 \toprule
-\textbf{Concepto / Partición} & \textbf{Rango Temporal / Detalle} & \textbf{Valor} \\
+\textbf{Concepto / Split} & \textbf{Rango Temporal / Detalle} & \textbf{Valor} \\
 \midrule
-Registros crudos iniciales & 2002-01-01 01:00 -- 2018-08-03 00:00 & 145{,}366 \\
-Duplicados DST resueltos & Promedio determinista de hora repetida & 4 \\
-Horas faltantes imputadas & Interpolación lineal (hueco máx. = 1\,h) & 30 \\
-Serie horaria limpia total & Media $32{,}078.9$\,MW ($\sigma=6{,}464.3$\,MW) & 145{,}392 \\
+Registros crudos & 2002-01-01 -- 2018-08-03 & 145{,}366 \\
+Duplicados DST & Promedio de hora repetida & 4 \\
+Horas imputadas & Interp.\ lineal (máx.\ 1\,h) & 30 \\
+Serie limpia total & $\mu=32{,}078.9$, $\sigma=6{,}464.3$\,MW & 145{,}392 \\
 \midrule
-Entrenamiento (\texttt{train}, 70\,\%) & 2002-01-01 01:00 -- 2013-08-11 14:00 & 101{,}774 \\
-Validación (\texttt{val}, 15\,\%) & 2013-08-11 15:00 -- 2016-02-06 06:00 & 21{,}808 \\
-Prueba ciega (\texttt{test}, 15\,\%) & 2016-02-06 07:00 -- 2018-08-03 00:00 & 21{,}810 \\
+Train (70\,\%) & 2002-01-01 01h -- 2013-08-11 14h & 101{,}774 \\
+Validación (15\,\%) & 2013-08-11 15h -- 2016-02-06 06h & 21{,}808 \\
+Test sellado (15\,\%) & 2016-02-06 07h -- 2018-08-03 00h & 21{,}810 \\
 \midrule
-Ventanas \texttt{train} / \texttt{val} / \texttt{test} & Tensores $W=72 \to H=24$ aislados & 101{,}511 / 21{,}545 / 21{,}547 \\
-Umbral pico $P_{90}$ (\texttt{train}) & Percentil 90 solo de entrenamiento & 40{,}850.7\,MW \\
+Ventanas ($W=72$) & Train / Val / Test aislados & 101.5k / 21.5k / 21.5k \\
+Umbral pico $P_{90}$ & Percentil 90 solo de \texttt{train} & 40{,}850.7\,MW \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -207,21 +210,22 @@ La Tabla~\ref{tab:sarima_matched} presenta la comparación emparejada frente a \
 
 \begin{table}[htbp]
 \centering
-\caption{Comparativa Emparejada con SARIMA (28 Días Estratificados en Validación)}
+\caption{Comparativa Emparejada con SARIMA (28 Días Estratificados)}
 \label{tab:sarima_matched}
-\footnotesize
-\begin{tabular}{l c c c c}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}X c c c c}
 \toprule
-\textbf{Modelo} & \textbf{RMSE (MW)} & \textbf{MAE (MW)} & \textbf{MAPE (\%)} & $\mathbf{R^2}$ \\
+\textbf{Modelo} & \textbf{RMSE} & \textbf{MAE} & \textbf{MAPE} & $\mathbf{R^2}$ \\
 \midrule
-Perfil Condicional & $5{,}063.10$ & $4{,}053.41$ & $13.07$ & $0.3222$ \\
-Persistencia 168\,h & $3{,}882.30$ & $2{,}909.22$ & $8.77$ & $0.6015$ \\
-Persistencia 24\,h & $3{,}078.51$ & $2{,}324.74$ & $7.21$ & $0.7494$ \\
-SARIMA$(1,1,1)\times(1,1,1)_{24}$ & $2{,}269.12$ & $1{,}665.04$ & $5.17$ & $0.8639$ \\
-LSTM Pura & $1{,}689.39$ & $1{,}260.35$ & $3.94$ & $0.9245$ \\
-\textbf{CNN1D-LSTM} & $\mathbf{1{,}608.88}$ & $\mathbf{1{,}191.85}$ & $\mathbf{3.72}$ & $\mathbf{0.9316}$ \\
+Perfil Condicional & $5{,}063.10$ & $4{,}053.41$ & $13.07\%$ & $0.3222$ \\
+Persistencia 168\,h & $3{,}882.30$ & $2{,}909.22$ & $8.77\%$ & $0.6015$ \\
+Persistencia 24\,h & $3{,}078.51$ & $2{,}324.74$ & $7.21\%$ & $0.7494$ \\
+SARIMA $(1,1,1)\times(1,1,1)_{24}$ & $2{,}269.12$ & $1{,}665.04$ & $5.17\%$ & $0.8639$ \\
+LSTM Pura & $1{,}689.39$ & $1{,}260.35$ & $3.94\%$ & $0.9245$ \\
+\textbf{CNN1D-LSTM} & $\mathbf{1{,}608.88}$ & $\mathbf{1{,}191.85}$ & $\mathbf{3.72\%}$ & $\mathbf{0.9316}$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \subsection{Análisis por Horizonte y Regímenes Operativos (PI-2)}
@@ -247,19 +251,20 @@ La Fig.~\ref{fig:horizon_regimes} y la Tabla~\ref{tab:regimes} desagregan el des
 \centering
 \caption{Desempeño por Régimen Operativo en Validación (RMSE / MAPE)}
 \label{tab:regimes}
-\footnotesize
-\begin{tabular}{l r c c}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}X r c c}
 \toprule
-\textbf{Régimen Operativo} & \textbf{Puntos} & \textbf{LSTM Pura} & \textbf{CNN1D-LSTM} \\
+\textbf{Régimen} & \textbf{Puntos} & \textbf{LSTM Pura} & \textbf{CNN1D-LSTM} \\
 \midrule
 Global & 517{,}080 & $1{,}845.75$ / $4.29\%$ & $\mathbf{1{,}806.45}$ / $\mathbf{4.12\%}$ \\
 Franja Pico ($14\text{--}20\,\text{h}$) & 150{,}815 & $2{,}138.31$ / $4.54\%$ & $\mathbf{2{,}108.24}$ / $\mathbf{4.39\%}$ \\
-Valle de Demanda ($<P_{90}$) & 475{,}575 & $1{,}747.63$ / $4.26\%$ & $\mathbf{1{,}692.04}$ / $\mathbf{4.05\%}$ \\
+Valle ($<P_{90}$) & 475{,}575 & $1{,}747.63$ / $4.26\%$ & $\mathbf{1{,}692.04}$ / $\mathbf{4.05\%}$ \\
 Días Laborales & 369{,}596 & $1{,}907.66$ / $4.27\%$ & $\mathbf{1{,}861.49}$ / $\mathbf{4.08\%}$ \\
-Fines de Semana & 147{,}484 & $1{,}680.61$ / $4.34\%$ & $\mathbf{1{,}660.51}$ / $\mathbf{4.22\%}$ \\
+Fin de Semana & 147{,}484 & $1{,}680.61$ / $4.34\%$ & $\mathbf{1{,}660.51}$ / $\mathbf{4.22\%}$ \\
 Pico Extremo ($\ge P_{90}$) & 41{,}505 & $\mathbf{2{,}728.90}$ / $\mathbf{4.69\%}$ & $2{,}801.73$ / $4.85\%$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \section{Discusión Preliminar y Plan Ajustado}
@@ -281,14 +286,15 @@ A partir de los hallazgos obtenidos, la Tabla~\ref{tab:plan_ajustado} detalla el
 \centering
 \caption{Plan Ajustado para las Últimas 5 Semanas (Hacia Entregable 3)}
 \label{tab:plan_ajustado}
-\footnotesize
-\begin{tabularx}{\columnwidth}{c l p{3.8cm} l}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{c >{\raggedright\arraybackslash}p{1.35cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{1.3cm}}
 \toprule
 \textbf{Sem.} & \textbf{Fase} & \textbf{Actividades Específicas} & \textbf{Resp.} \\
 \midrule
-11 & Optimización & Búsqueda bayesiana con Optuna \cite{akiba2019optuna} sobre \texttt{val} (tasa de aprendizaje, filtros, \textit{dropout}, ventana $W \in \{72, 168\}$). & A.\ Mosquera \\
-12 & Ablación & Ablación estructural en \texttt{val}: sin \texttt{MaxPool1D}, $\pm$\texttt{Dropout1d}, variante CNN-GRU \cite{sajjad2020novel} y TCN \cite{bai2018empirical}. & A.\ Mosquera / J.\ Villalba \\
-13 & Evaluación Ciega & Liberación única del split \texttt{test} (2016--2018), pruebas de significancia Diebold-Mariano \cite{diebold1995comparing} y errores por estación. & S.\ Cadena \\
+11 & Optimización & Búsqueda bayesiana con Optuna \cite{akiba2019optuna} sobre \texttt{val} (LR, filtros, \textit{dropout}, $W \in \{72, 168\}$). & A.\ Mosquera \\
+12 & Ablación & Ablación en \texttt{val}: sin \texttt{MaxPool1D}, $\pm$\texttt{Dropout1d}, CNN-GRU \cite{sajjad2020novel} y TCN \cite{bai2018empirical}. & A.\ Mosquera / J.\ Villalba \\
+13 & Eval.\ Ciega & Liberación única de \texttt{test} (2016--2018), test Diebold-Mariano \cite{diebold1995comparing} y errores estacionales. & S.\ Cadena \\
 14 & Consolidación & Discusión crítica, amenazas a la validez, ética de datos y figuras finales. & Equipo \\
 15 & Entrega 3 & Artículo IMRaD completo (8--12 págs.) y repositorio final documentado. & Equipo \\
 \bottomrule
