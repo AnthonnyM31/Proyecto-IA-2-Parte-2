@@ -13,8 +13,8 @@
 | :--- | :--- | :---: | :--- |
 | **D1** | Portada, título, link al repo GitHub y objetivos de E2 | 0:30 | Juan José Villalba |
 | **D2** | Continuidad desde E1: mejoras de rúbrica y política `val` vs `test` sellado | 0:50 | Juan José Villalba |
-| **D3** | Datos reales PJME (145{,}392 h), limpieza DST y **Fig. 1** (EDA + ACF) | 1:15 | Juan José Villalba |
-| **D4** | Arquitectura controlada (`PureLSTM` vs `CNN1D-LSTM`, **Fig. 2**) y `pytest` | 1:15 | Anthonny Mosquera |
+| **D3** | Datos reales PJME (145{,}392 h), limpieza DST y **Fig. 2** (EDA + ACF) | 1:15 | Juan José Villalba |
+| **D4** | Arquitectura controlada (`PureLSTM` vs `CNN1D-LSTM`, **Fig. 1**) y `pytest` | 1:15 | Anthonny Mosquera |
 | **D5** | Líneas base implementadas: Persistencia 24h/168h, Perfil, ADF/KPSS y SARIMA | 1:05 | Sebastián Cadena |
 | **D6** | Resultados en Validación Completa (**Tabla Global** + **Fig. 3** Curvas) | 1:15 | Sebastián Cadena |
 | **D7** | Comparativa emparejada con SARIMA (28 días) y episodio pico (**Fig. 4**) | 1:00 | Sebastián Cadena |
@@ -27,7 +27,7 @@
 
 ### Bloque 1 — Juan José Villalba (0:00 – 2:35 | Diapositivas D1–D3)
 - **D1–D2:** *"Buenas tardes profesor Enrique Carrera y compañeros. Presentamos el avance técnico del Entregable 2 de nuestro proyecto de pronóstico de carga horaria en la red PJM. Partiendo de la retroalimentación del Entregable 1, consolidamos un repositorio reproducible en GitHub, ampliamos la revisión bibliográfica a 18 referencias verificadas y adoptamos una regla estricta anti-fuga de datos: toda evaluación preliminar de este entregable se realizó exclusivamente sobre Validación (2013–2016), manteniendo el conjunto de Prueba ciega (2016–2018) completamente sellado hasta el Entregable 3."*
-- **D3 (Fig. 1 y Tabla de Limpieza):** *"Migramos al conjunto real completo de PJME con 145,366 registros horarios entre 2002 y 2018. Nuestro pipeline causal resolvió 4 marcas de tiempo duplicadas por transiciones DST de otoño e interpoló 30 horas faltantes con brecha máxima de 1 hora, obteniendo 145,392 registros continuos. Como muestra la Figura 1, la autocorrelación presenta picos fuertes en 24h, 72h y 168h, justificando nuestra ventana $W=72$ horas y la variable causal `lag_168`. Todo el escalamiento Min-Max se ajustó únicamente sobre entrenamiento y está blindado por 6 tests unitarios en `pytest`."*
+- **D3 (Fig. 2 y Tabla II):** *"Migramos al conjunto real completo de PJME con 145,366 registros horarios entre 2002 y 2018. Nuestro pipeline causal resolvió 4 marcas de tiempo duplicadas por transiciones DST de otoño e interpoló 30 horas faltantes con brecha máxima de 1 hora, obteniendo 145,392 registros continuos. Como muestra la Figura 2, la autocorrelación presenta picos fuertes en 24h, 72h y 168h, justificando nuestra ventana $W=72$ horas y la variable causal `lag_168`. Todo el escalamiento Min-Max se ajustó únicamente sobre entrenamiento y está blindado por 6 tests unitarios en `pytest`."*
 
 ### Bloque 2 — Sebastián Cadena (2:35 – 5:55 | Diapositivas D5–D7)
 - **D5:** *"Para evaluar rigurosamente la arquitectura propuesta, implementamos cuatro líneas base en MW reales desnormalizados: Persistencia 24h, Persistencia Semanal 168h, Perfil Horario Condicional y SARIMA$(1,1,1)\times(1,1,1)_{24}$, cuya diferenciación estacional fue validada con pruebas KPSS y ADF ($p = 1.98 \times 10^{-21}$ tras diferenciar en $s=24$). También implementamos una LSTM Pura que comparte exactamente el mismo bloque recurrente y cabeza densa para aislar el efecto de las convoluciones 1D."*
@@ -35,7 +35,7 @@
 - **D7 (Tabla SARIMA + Fig. 4):** *"En el protocolo estratificado de 28 días para comparar de forma justa con SARIMA (ya que ajustar SARIMA toma 10.1 s por origen), CNN1D-LSTM alcanzó $1,608.88$ MW ($\text{MAPE}=3.72\%$) frente a $2,269.12$ MW de SARIMA (una mejora del 29.1%). En la Figura 4(b) se observa cómo durante el pico estival de ~55 GW, SARIMA subestima la cresta en ~3 GW mientras las arquitecturas profundas siguen de cerca la curva real."*
 
 ### Bloque 3 — Anthonny Mosquera (5:55 – 8:30 | Diapositivas D4, D8–D9)
-- **D4 y D8 (Fig. 2 y Fig. 5):** *"En el análisis desagregado por horizonte $h=1\dots 24$ y regímenes críticos, CNN1D-LSTM supera consistentemente a LSTM Pura en error global ($1,806.45$ vs. $1,845.75$ MW), en la franja pico diaria de 14:00 a 20:00 ($2,108.24$ vs. $2,138.31$ MW), en días laborales y en fines de semana."*
+- **D4 y D8 (Fig. 1 y Fig. 5):** *"En el análisis desagregado por horizonte $h=1\dots 24$ y regímenes críticos, CNN1D-LSTM supera consistentemente a LSTM Pura en error global ($1,806.45$ vs. $1,845.75$ MW), en la franja pico diaria de 14:00 a 20:00 ($2,108.24$ vs. $2,138.31$ MW), en días laborales y en fines de semana."*
 - **D9 (Dificultades y Plan Semanas 11–15):** *"Con espíritu crítico, detectamos tres hallazgos y dificultades importantes: primero, en el decil extremo superior ($\ge P_{90} = 40,850.7$ MW), CNN1D-LSTM obtuvo ligeramente mayor error ($2,801.7$ vs. $2,728.9$ MW de LSTM Pura), lo que atribuimos al efecto suavizador de `MaxPool1D(2)` y `Dropout1d` ante picos térmicos sin variables meteorológicas exógenas. Segundo, observamos variabilidad entre semillas comparable a la ganancia media ($\sim 38$ MW). Tercero, ajustar SARIMA sobre toda la serie es computacionalmente prohibitivo. Por ello, en las Semanas 11 a 15 ejecutaremos optimización bayesiana con Optuna sobre validación, un estudio de ablación eliminando pooling y comparando variantes CNN-GRU y TCN, y finalmente liberaremos el conjunto `test` sellado con pruebas estadísticas Diebold-Mariano. Muchas gracias, quedamos atentos a sus preguntas."*
 
 ---
